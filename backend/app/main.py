@@ -3,8 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from backend.app.database import engine, Base
-from backend.app.routers import auth, documents, chat
+from database import engine, Base
+from routers import auth, documents, chat
 
 load_dotenv()
 
