@@ -99,3 +99,12 @@ body {
 .animate-slide-in {
   animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
+
+.glass-panel {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+

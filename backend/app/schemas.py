@@ -20,6 +20,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str = Field(..., min_length=6)
     role: Optional[str] = "student"  # "student" or "admin"
+    branch: Optional[str] = None
 
 class UserLogin(BaseModel):
     username: str
@@ -28,6 +29,7 @@ class UserLogin(BaseModel):
 class UserResponse(UserBase):
     id: int
     role: str
+    branch: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -39,6 +41,7 @@ class DocumentResponse(BaseModel):
     id: int
     filename: str
     category: str
+    branch: str
     uploaded_by: int
     uploaded_at: datetime
     status: str

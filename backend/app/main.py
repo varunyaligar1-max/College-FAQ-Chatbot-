@@ -32,7 +32,10 @@ app.include_router(chat.router)
 async def on_startup():
     # Initialize SQLAlchemy models asynchronously on startup
     print("Database: Initializing database tables...")
+    from sqlalchemy import text
     async with engine.begin() as conn:
+        await conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS branch VARCHAR(50);"))
+        await conn.execute(text("ALTER TABLE documents ADD COLUMN IF NOT EXISTS branch VARCHAR(50) DEFAULT 'Common' NOT NULL;"))
         await conn.run_sync(Base.metadata.create_all)
     print("Database: Tables initialized successfully.")
 

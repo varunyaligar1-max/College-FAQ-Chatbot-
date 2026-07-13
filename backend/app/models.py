@@ -12,6 +12,7 @@ class User(Base):
     email = Column(String(100), unique=True, index=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     role = Column(String(20), default="student", nullable=False)  # "student" or "admin"
+    branch = Column(String(50), nullable=True)  # e.g., "CSE", "ECE", "ME", "AIML"
     created_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
 
     # Relationships
@@ -25,6 +26,7 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     filename = Column(String(255), nullable=False)
     category = Column(String(50), nullable=False)  # "rules", "syllabus", "fees", "hostel"
+    branch = Column(String(50), default="Common", nullable=False)  # e.g. "Common", "CSE", etc.
     uploaded_by = Column(Integer, ForeignKey("users.id"), nullable=False)
     uploaded_at = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
     status = Column(String(50), default="processing", nullable=False)  # "processing", "completed", "failed"
