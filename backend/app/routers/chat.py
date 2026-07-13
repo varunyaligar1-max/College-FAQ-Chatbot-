@@ -87,6 +87,7 @@ async def query_chatbot(
     hits = await qdrant_service.search_relevant_chunks(
         query=chat_query.query,
         category=chat_query.category,
+        user_branch=current_user.branch,
         limit=4
     )
 

@@ -11,6 +11,7 @@ export const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('student');
+  const [branch, setBranch] = useState('CSE');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export const RegisterPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await register(username, email, password, role);
+      await register(username, email, password, role, role === 'student' ? branch : undefined);
       setSuccess('Registration successful! Redirecting to login page...');
       setTimeout(() => {
         navigate('/login');
@@ -116,6 +117,27 @@ export const RegisterPage: React.FC = () => {
               </select>
             </div>
           </div>
+
+          {role === 'student' && (
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Academic Branch</label>
+              <div style={styles.inputWrapper}>
+                <GraduationCap size={18} style={styles.inputIcon} />
+                <select
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
+                  style={styles.select}
+                  disabled={loading}
+                >
+                  <option value="CSE">Computer Science (CSE)</option>
+                  <option value="ECE">Electronics & Communication (ECE)</option>
+                  <option value="ME">Mechanical Engineering (ME)</option>
+                  <option value="AIML">Artificial Intelligence & ML (AIML)</option>
+                  <option value="Civil">Civil Engineering (Civil)</option>
+                </select>
+              </div>
+            </div>
+          )}
 
           <div style={styles.inputGroup}>
             <label style={styles.label}>Password</label>

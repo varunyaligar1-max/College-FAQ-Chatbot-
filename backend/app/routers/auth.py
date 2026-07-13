@@ -50,7 +50,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username, "role": user.role, "id": user.id},
+        data={"sub": user.username, "role": user.role, "id": user.id, "branch": user.branch},
         expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}

@@ -212,7 +212,14 @@ export const ChatPage: React.FC = () => {
             </div>
             <div style={styles.userDetails}>
               <span style={styles.username}>{user?.username}</span>
-              <span style={styles.roleTag}>{user?.role}</span>
+              <div style={{ display: 'flex', gap: '4px', marginTop: '2px' }}>
+                <span style={styles.roleTag}>{user?.role}</span>
+                {user?.branch && (
+                  <span style={{ ...styles.roleTag, backgroundColor: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa', borderColor: 'rgba(139, 92, 246, 0.3)' }}>
+                    {user?.branch}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <div style={styles.footerActionRow}>

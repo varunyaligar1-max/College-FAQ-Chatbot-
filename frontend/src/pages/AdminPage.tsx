@@ -10,6 +10,7 @@ interface Document {
   id: number;
   filename: string;
   category: string;
+  branch: string;
   uploaded_at: string;
   status: 'processing' | 'completed' | 'failed';
 }
@@ -21,6 +22,7 @@ export const AdminPage: React.FC = () => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [category, setCategory] = useState('rules'); // rules, syllabus, fees, hostel
+  const [branch, setBranch] = useState('Common');
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -77,6 +79,7 @@ export const AdminPage: React.FC = () => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('category', category);
+    formData.append('branch', branch);
 
     try {
       await axios.post(`${API_URL}/api/documents/upload`, formData, {
@@ -84,6 +87,7 @@ export const AdminPage: React.FC = () => {
       });
       setSuccess(`Successfully ingested "${file.name}"!`);
       setFile(null);
+      setBranch('Common');
       
       // Reset input element
       const fileInput = document.getElementById('file-input') as HTMLInputElement;
@@ -196,6 +200,23 @@ export const AdminPage: React.FC = () => {
               </div>
 
               <div style={styles.inputGroup}>
+                <label style={styles.label}>Select Branch</label>
+                <select
+                  value={branch}
+                  onChange={(e) => setBranch(e.target.value)}
+                  style={styles.select}
+                  disabled={uploading}
+                >
+                  <option value="Common">Common (All Students)</option>
+                  <option value="CSE">Computer Science (CSE)</option>
+                  <option value="ECE">Electronics & Communication (ECE)</option>
+                  <option value="ME">Mechanical Engineering (ME)</option>
+                  <option value="AIML">Artificial Intelligence & ML (AIML)</option>
+                  <option value="Civil">Civil Engineering (Civil)</option>
+                </select>
+              </div>
+
+              <div style={styles.inputGroup}>
                 <label style={styles.label}>Upload File</label>
                 <div style={styles.uploadArea}>
                   <FileText size={32} color="var(--text-muted)" style={{ marginBottom: '10px' }} />
@@ -259,6 +280,7 @@ export const AdminPage: React.FC = () => {
                     <tr>
                       <th style={styles.th}>Filename</th>
                       <th style={styles.th}>Category</th>
+                      <th style={styles.th}>Branch</th>
                       <th style={styles.th}>Status</th>
                       <th style={styles.th}>Upload Date</th>
                       <th style={{ ...styles.th, textAlign: 'center' }}>Action</th>
@@ -278,6 +300,12 @@ export const AdminPage: React.FC = () => {
                             ...styles.badge,
                             backgroundColor: getCategoryColor(doc.category),
                           }}>{doc.category}</span>
+                        </td>
+                        <td style={styles.td}>
+                          <span style={{
+                            ...styles.badge,
+                            backgroundColor: doc.branch === 'Common' ? '#475569' : '#8b5cf6',
+                          }}>{doc.branch}</span>
                         </td>
                         <td style={styles.td}>
                           <span style={{

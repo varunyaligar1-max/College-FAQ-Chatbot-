@@ -16,6 +16,7 @@ router = APIRouter(prefix="/api/documents", tags=["documents"])
 async def upload_document(
     file: UploadFile = File(...),
     category: str = Form(...),  # "rules", "syllabus", "fees", "hostel"
+    branch: str = Form("Common"),
     current_admin: User = Depends(get_admin_user),
     document_service: DocumentService = Depends(get_document_service),
     db: AsyncSession = Depends(get_db)
@@ -45,7 +46,8 @@ async def upload_document(
         filename=filename,
         category=category,
         file_bytes=file_bytes,
-        user_id=current_admin.id
+        user_id=current_admin.id,
+        branch=branch
     )
     
     if db_doc.status == "failed":

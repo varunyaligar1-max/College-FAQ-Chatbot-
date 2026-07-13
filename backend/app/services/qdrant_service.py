@@ -2,7 +2,7 @@ import os
 import uuid
 from typing import List, Dict, Any, Optional
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue
+from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue, MatchAny
 from fastembed import TextEmbedding
 from dotenv import load_dotenv
 
@@ -83,7 +83,8 @@ class QdrantService:
         document_id: int, 
         filename: str, 
         category: str, 
-        chunks: List[str]
+        chunks: List[str],
+        branch: str = "Common"
     ) -> bool:
         if not chunks:
             return True
@@ -104,7 +105,8 @@ class QdrantService:
                             "filename": filename,
                             "category": category.lower(),
                             "text": chunk,
-                            "chunk_index": i
+                            "chunk_index": i,
+                            "branch": branch
                         }
                     )
                 )
@@ -125,22 +127,41 @@ class QdrantService:
         self, 
         query: str, 
         category: str = "all", 
+        user_branch: Optional[str] = None,
         limit: int = 5
     ) -> List[Dict[str, Any]]:
         try:
             query_vector = self.embed_query(query)
             
-            # Define filter by category if not "all"
-            search_filter = None
+            # Define filters
+            must_conditions = []
+            
             if category and category.lower() != "all":
-                search_filter = Filter(
-                    must=[
-                        FieldCondition(
-                            key="category",
-                            match=MatchValue(value=category.lower())
-                        )
-                    ]
+                must_conditions.append(
+                    FieldCondition(
+                        key="category",
+                        match=MatchValue(value=category.lower())
+                    )
                 )
+                
+            if user_branch:
+                # Retrieve branch-specific or Common documents
+                must_conditions.append(
+                    FieldCondition(
+                        key="branch",
+                        match=MatchAny(any=["Common", user_branch])
+                    )
+                )
+            else:
+                # If no branch is specified, only return Common documents
+                must_conditions.append(
+                    FieldCondition(
+                        key="branch",
+                        match=MatchValue(value="Common")
+                    )
+                )
+                
+            search_filter = Filter(must=must_conditions) if must_conditions else None
                 
             results = self.client.query_points(
                 collection_name=self.collection_name,

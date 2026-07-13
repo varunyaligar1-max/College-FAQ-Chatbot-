@@ -43,14 +43,16 @@ class DocumentService:
         filename: str,
         category: str,
         file_bytes: bytes,
-        user_id: int
+        user_id: int,
+        branch: str = "Common"
     ) -> Document:
         # Create Document record in PostgreSQL with status 'processing'
         db_doc = Document(
             filename=filename,
             category=category.lower(),
             uploaded_by=user_id,
-            status="processing"
+            status="processing",
+            branch=branch
         )
         db.add(db_doc)
         await db.commit()
@@ -79,7 +81,8 @@ class DocumentService:
                 document_id=db_doc.id,
                 filename=db_doc.filename,
                 category=db_doc.category,
-                chunks=chunks
+                chunks=chunks,
+                branch=db_doc.branch
             )
 
             if qdrant_success:

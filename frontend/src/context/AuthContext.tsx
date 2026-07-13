@@ -5,13 +5,14 @@ interface User {
   id: number;
   username: string;
   role: string;
+  branch?: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (username: string, password: string) => Promise<void>;
-  register: (username: string, email: string, password: string, role: string) => Promise<void>;
+  register: (username: string, email: string, password: string, role: string, branch?: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
 }
@@ -54,6 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           id: decoded.id,
           username: decoded.sub,
           role: decoded.role,
+          branch: decoded.branch,
         });
         axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
       } else {
@@ -98,15 +100,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: decoded.id,
       username: decoded.sub,
       role: decoded.role,
+      branch: decoded.branch,
     });
   };
 
-  const register = async (username: string, email: string, password: string, role: string) => {
+  const register = async (username: string, email: string, password: string, role: string, branch?: string) => {
     await axios.post(`${API_URL}/api/auth/register`, {
       username,
       email,
       password,
       role,
+      branch: branch || null,
     });
   };
 
