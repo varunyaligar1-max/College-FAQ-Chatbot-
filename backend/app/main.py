@@ -1,10 +1,16 @@
+import os
+import sys
+
+# Ensure the workspace root is in sys.path so 'backend' is recognized as a package
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from database import engine, Base
-from routers import auth, documents, chat
+from backend.app.database import engine, Base
+from backend.app.routers import auth, documents, chat
 
 load_dotenv()
 
