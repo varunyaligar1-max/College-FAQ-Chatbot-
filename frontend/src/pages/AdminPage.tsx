@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   ArrowLeft, Upload, FileText, Trash2, Database, Shield, 
-  Sparkles, CheckCircle2, AlertTriangle, RefreshCw, BarChart2 
+  CheckCircle2, AlertTriangle, RefreshCw, BarChart2 
 } from 'lucide-react';
 
 interface Document {
@@ -79,7 +79,7 @@ export const AdminPage: React.FC = () => {
     formData.append('category', category);
 
     try {
-      const res = await axios.post(`${API_URL}/api/documents/upload`, formData, {
+      await axios.post(`${API_URL}/api/documents/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setSuccess(`Successfully ingested "${file.name}"!`);
@@ -148,18 +148,18 @@ export const AdminPage: React.FC = () => {
                 <span style={styles.statLabel}>Documents Ingested</span>
               </div>
               <div style={styles.statBox}>
-                <span style={styles.statValue} style={{ fontSize: '13px', color: '#10b981', fontWeight: '700' }}>Active</span>
+                <span style={{ ...styles.statValue, fontSize: '13px', color: '#10b981', fontWeight: '700' }}>Active</span>
                 <span style={styles.statLabel}>Qdrant Vector DB</span>
               </div>
               <div style={styles.statBox}>
-                <span style={styles.statValue} style={{ fontSize: '13px', color: '#8b5cf6', fontWeight: '700' }}>MiniLM-L6-v2</span>
+                <span style={{ ...styles.statValue, fontSize: '13px', color: '#8b5cf6', fontWeight: '700' }}>MiniLM-L6-v2</span>
                 <span style={styles.statLabel}>Embedding Model</span>
               </div>
             </div>
           </div>
 
           {/* Ingestion Panel */}
-          <div style={styles.card} className="glass-panel animate-fade-in" style={{ marginTop: '20px' }}>
+          <div className="glass-panel animate-fade-in" style={{ ...styles.card, marginTop: '20px' }}>
             <h2 style={styles.cardTitle}>
               <Upload size={18} color="#8b5cf6" style={{ marginRight: '8px' }} />
               Ingest Official Document
@@ -234,7 +234,7 @@ export const AdminPage: React.FC = () => {
         {/* Right Side: Document Catalog */}
         <div style={styles.rightCol} className="glass-panel animate-fade-in">
           <div style={styles.catalogHeader}>
-            <h2 style={styles.cardTitle} style={{ margin: 0 }}>
+            <h2 style={{ ...styles.cardTitle, margin: 0 }}>
               <FileText size={18} color="#10b981" style={{ marginRight: '8px' }} />
               Document Catalog
             </h2>
@@ -261,7 +261,7 @@ export const AdminPage: React.FC = () => {
                       <th style={styles.th}>Category</th>
                       <th style={styles.th}>Status</th>
                       <th style={styles.th}>Upload Date</th>
-                      <th style={styles.th} style={{ textAlign: 'center' }}>Action</th>
+                      <th style={{ ...styles.th, textAlign: 'center' }}>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -289,7 +289,7 @@ export const AdminPage: React.FC = () => {
                         <td style={styles.td}>
                           {new Date(doc.uploaded_at).toLocaleDateString()}
                         </td>
-                        <td style={styles.td} style={{ textAlign: 'center' }}>
+                        <td style={{ ...styles.td, textAlign: 'center' }}>
                           <button style={styles.deleteBtn} onClick={() => handleDelete(doc.id)}>
                             <Trash2 size={16} />
                           </button>
@@ -554,7 +554,6 @@ const styles: Record<string, React.CSSProperties> = {
   },
   refreshBtn: {
     background: 'none',
-    border: 'none',
     cursor: 'pointer',
     color: 'var(--text-secondary)',
     width: '32px',

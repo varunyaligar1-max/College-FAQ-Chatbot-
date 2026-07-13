@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   MessageSquare, Plus, LogOut, Shield, Send, Sparkles, BookOpen, 
-  HelpCircle, ChevronDown, ChevronUp, FileText, Bookmark, Settings 
+  ChevronDown, ChevronUp, FileText, Bookmark 
 } from 'lucide-react';
 
 interface Source {
